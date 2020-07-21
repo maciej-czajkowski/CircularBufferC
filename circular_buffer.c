@@ -8,15 +8,15 @@ int circular_buffer_create(struct circular_buffer_t *a, int N) {
     }
 
 
-    a->ptr = (int *) malloc(N * sizeof(int));
+    a->ptr = (int *) calloc(N, sizeof(int));
 
     if (a->ptr == NULL) {
         return 2;
     }
     a->capacity = N;
-    a->begin = 0;
-    a->end = 0;
-    a->full = 0;
+    // a->begin = 0;
+    // a->end = 0;
+    // a->full = 0;
 
     return 0;
 }
@@ -31,17 +31,16 @@ int circular_buffer_create_struct(struct circular_buffer_t **cb, int N) {
         return 2;
     }
     circular_buffer_create(*cb, N);
-//    (*cb)->ptr = (int *) calloc(N, sizeof(int));
 
     if ((*cb)->ptr == NULL) {
         free(*cb);
         return 2;
     }
 
-    (*cb)->begin = 0;
-    (*cb)->end = 0;
-    (*cb)->capacity = N;
-    (*cb)->full = 0;
+    // (*cb)->begin = 0;
+    // (*cb)->end = 0;
+    // (*cb)->capacity = N;
+    // (*cb)->full = 0;
     return 0;
 }
 
@@ -71,7 +70,6 @@ int circular_buffer_push_back(struct circular_buffer_t *cb, int value) {
 
     *(cb->ptr + cb->end) = value;
     cb->end = (cb->end + 1) % cb->capacity;
-    //printf("Wrzucamy %d do %d\n", value, cb->end);
 
     if (cb->full == 1) {
         cb->begin = (cb->begin + 1) % cb->capacity;
@@ -97,15 +95,6 @@ void circular_buffer_display(const struct circular_buffer_t *cb) {
                         printf("%d ", *(cb->ptr + i));
                         i++;
                     }
-
-
-
-//            for (int i = 0; i < cb->capacity; i++) {
-//                if ( ((cb->begin + i)%cb->capacity) == cb->end)
-//                {
-//                    break;
-//                }
-//                printf("%d ", *(cb->ptr + (cb->begin + i)%cb->capacity));
                 }
                 printf("\n");
             } else {
@@ -179,8 +168,6 @@ int circular_buffer_pop_front(struct circular_buffer_t *cb, int *err_code) {
     temp = *(cb->ptr + cb->begin);
     cb->begin = (cb->begin + 1) % cb->capacity;
     cb->full = 0;
-//    printf("Circular_buffer_empty in function  = %d\n", circular_buffer_empty(cb));
-
 
     if (err_code != NULL) {
         *err_code = 0;
